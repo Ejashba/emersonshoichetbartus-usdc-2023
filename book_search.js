@@ -36,7 +36,7 @@
         carryWord = "";
         for (let lineNum = 0; lineNum < content.length; lineNum++) {
             text = content[lineNum].Text;
-            words = text.split(/\s+/)
+            words = text.split(/\s+/);
             for (let w = 0; w < words.length; w++) {
                 word = cleanWord(words[w]);
                 if (w == 0) {
@@ -45,13 +45,13 @@
                         pushToResult(results, ISBN, content[lineNum-1].Page, content[lineNum-1].Line);
                     }
                     else if (carryWord.length == 0 && searchTerm == word) {
-                        pushToResult(results, ISBN, content[lineNum].Page, content[lineNum].Line)
+                        pushToResult(results, ISBN, content[lineNum].Page, content[lineNum].Line);
                     }
                     carryWord = ""; //reset carryWord
                 }
                 else if (w == words.length-1) { 
                     if (word.charAt(word.length-1) == '-') {
-                        carryWord = word.slice(0, word.length-1) //everything except last char (hyphen)
+                        carryWord = word.slice(0, word.length-1); //everything except last char (hyphen)
                         //don't push anything if last word is first half of a word, need to check next line
                     }
                     else if (word == searchTerm) {
@@ -98,14 +98,14 @@ const twentyLeaguesIn = [
             } 
         ] 
     }
-]
+];
 
 const nullBook = [{
     "Title": "NotMuchToSeeHere",
     "ISBN": "00000",
     "Content": []
 
-}]
+}];
 
 const goodReads = [twentyLeaguesIn[0], 
     {
@@ -145,7 +145,7 @@ const twentyLeaguesOut = {
             "Line": 9
         }
     ]
-}
+};
 
 /*
  _   _ _   _ ___ _____   _____ _____ ____ _____ ____  
@@ -171,7 +171,7 @@ function sandboxTest(term) {
     console.log(case1);
 }
 
-sandboxTest("now")
+//sandboxTest("now");
 
 var MultilineTestOut = {
     SearchTerm: 'darkness',
@@ -183,12 +183,12 @@ var MultilineTestOut = {
 
 const MultilineTestResult = findSearchTermInBooks("darkness", goodReads);
 if (JSON.stringify(MultilineTestOut) === JSON.stringify(MultilineTestResult)) {
-    console.log("PASS: Custom Test 1");
+    console.log("PASS: Multiline Test");
 } else {
-    console.log("FAIL: Custom Test 1");
+    console.log("FAIL: Multiline Test");
     console.log("Expected:", MultilineTestOut);
     console.log("Received:", MultilineTestResult);
-}
+};
 
 var FirstHalfMultilineOut = {
     SearchTerm: 'dark',
@@ -197,12 +197,12 @@ var FirstHalfMultilineOut = {
 
 const FirstHalfMultilineResult = findSearchTermInBooks("dark", twentyLeaguesIn);
 if (JSON.stringify(FirstHalfMultilineOut) === JSON.stringify(FirstHalfMultilineResult)) {
-    console.log("PASS: Custom Test 2");
+    console.log("PASS: FirstHalfMultiline Test");
 } else {
-    console.log("FAIL: Custom Test 2");
+    console.log("FAIL: FirstHalfMultiline Test");
     console.log("Expected:", FirstHalfMultilineOut);
     console.log("Received:", FirstHalfMultilineResult);
-}
+};
 
 var SecondHalfMultilineOut = {
     SearchTerm: 'ness',
@@ -211,12 +211,12 @@ var SecondHalfMultilineOut = {
 
 const SecondHalfMultilineResult = findSearchTermInBooks("ness", twentyLeaguesIn);
 if (JSON.stringify(SecondHalfMultilineOut) === JSON.stringify(SecondHalfMultilineResult)) {
-    console.log("PASS: Custom Test 3");
+    console.log("PASS: SecondHalfMultiline Test");
 } else {
-    console.log("FAIL: Custom Test 3");
+    console.log("FAIL: SecondHalfMultiline Test");
     console.log("Expected:", SecondHalfMultilineOut);
     console.log("Received:", SecondHalfMultilineResult);
-}
+};
 
 var ApostropheTestOut = {
     SearchTerm: "Canadian\'s",
@@ -227,17 +227,17 @@ var ApostropheTestOut = {
 
   const ApostropheTestResult = findSearchTermInBooks("Canadian\'s", goodReads);
   if (JSON.stringify(ApostropheTestOut) === JSON.stringify(ApostropheTestResult)) {
-      console.log("PASS: Custom Test 4");
+      console.log("PASS: Apostrophe Test");
   } else {
-      console.log("FAIL: Custom Test 4");
+      console.log("FAIL: Apostrophe Test");
       console.log("Expected:", ApostropheTestOut);
       console.log("Received:", ApostropheTestResult);
-  }
+  };
 
   const firstWordEdgeCaseOut = {
     SearchTerm: 'now',
     Results: [ { ISBN: '9780000528531', Page: 31, Line: 8 } ]
-  }
+  };
 
   const firstWordEdgeCaseResult = findSearchTermInBooks("now", twentyLeaguesIn);
   if (JSON.stringify(firstWordEdgeCaseOut) === JSON.stringify(firstWordEdgeCaseResult)) {
@@ -246,7 +246,7 @@ var ApostropheTestOut = {
       console.log("FAIL: First Word Edge Case");
       console.log("Expected:", firstWordEdgeCaseOut);
       console.log("Received:", firstWordEdgeCaseResult);
-  }
+  };
 
 const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
 if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
@@ -255,7 +255,7 @@ if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
     console.log("FAIL: Test 1");
     console.log("Expected:", twentyLeaguesOut);
     console.log("Received:", test1result);
-}
+};
 
 /** We could choose to check that we get the right number of results. */
 const test2result = findSearchTermInBooks("the", twentyLeaguesIn); 
@@ -265,4 +265,4 @@ if (test2result.Results.length == 1) {
     console.log("FAIL: Test 2");
     console.log("Expected:", twentyLeaguesOut.Results.length);
     console.log("Received:", test2result.Results.length);
-}
+};
