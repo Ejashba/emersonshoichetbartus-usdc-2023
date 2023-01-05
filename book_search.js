@@ -1,17 +1,3 @@
-/** 
- * RECOMMENDATION
- * 
- * To test your code, you should open "tester.html" in a web browser.
- * You can then use the "Developer Tools" to see the JavaScript console.
- * There, you will see the results unit test execution. You are welcome
- * to run the code any way you like, but this is similar to how we will
- * run your code submission.
- * 
- * The Developer Tools in Chrome are available under the "..." menu, 
- * further hidden under the option "More Tools." In Firefox, they are 
- * under the hamburger (three horizontal lines), also hidden under "More Tools." 
- */
-
 /**
  * Searches for matches in scanned text.
  * @param {string} searchTerm - The word or term we're searching for. 
@@ -26,10 +12,8 @@
 
     function cleanWord(word) {
         /**
-         * 
          * removes punctuation from word
          * keeps all letters, hyphens, and apostrophes
-         * 
          * */
         var newWord = "";
         for (i = 0; i < word.length; i++) {
@@ -45,23 +29,23 @@
     }
 
     var results = [];
-    var carryWord, content, ISBN, text, words, word;
+    var carryWord, content, ISBN, text, words, word; //declaring variables outside loop
     for (let b = 0; b < scannedTextObj.length; b++) {
         ISBN = scannedTextObj[b].ISBN;
         content = scannedTextObj[b].Content;
-        //console.log(scannedTextObj[b]);
         carryWord = "";
-        //contentLength = content.length
         for (let lineNum = 0; lineNum < content.length; lineNum++) {
             text = content[lineNum].Text;
             words = text.split(/\s+/)
-            //console.log(words)
             for (let w = 0; w < words.length; w++) {
                 word = cleanWord(words[w]);
                 if (w == 0) {
                     if (carryWord.length > 0 && carryWord.concat(word) == searchTerm) {
                         //will push line where word begins (e.g. line containing "dark-")
                         pushToResult(results, ISBN, content[lineNum-1].Page, content[lineNum-1].Line);
+                    }
+                    else if (carryWord.length == 0 && searchTerm == word) {
+                        pushToResult(results, ISBN, content[lineNum].Page, content[lineNum].Line)
                     }
                     carryWord = ""; //reset carryWord
                 }
@@ -151,7 +135,6 @@ const goodReads = [twentyLeaguesIn[0],
         ] 
     }];
     
-//console.log(goodReads)
 /** Example output object */
 const twentyLeaguesOut = {
     "SearchTerm": "the",
@@ -183,14 +166,14 @@ const twentyLeaguesOut = {
 /** We can check that, given a known input, we get a known output. */
 
 function sandboxTest(term) {
-    case1 = findSearchTermInBooks(term, nullBook);
+    case1 = findSearchTermInBooks(term, twentyLeaguesIn);
     console.log("----CUSTOM TEST-----");
     console.log(case1);
 }
 
-//sandboxTest("on")
+sandboxTest("now")
 
-var customtest1resultout = {
+var MultilineTestOut = {
     SearchTerm: 'darkness',
     Results: [
       { ISBN: '9780000528531', Page: 31, Line: 8 },
@@ -198,57 +181,71 @@ var customtest1resultout = {
     ]
   };
 
-const customtest1result = findSearchTermInBooks("darkness", goodReads);
-if (JSON.stringify(customtest1resultout) === JSON.stringify(customtest1result)) {
+const MultilineTestResult = findSearchTermInBooks("darkness", goodReads);
+if (JSON.stringify(MultilineTestOut) === JSON.stringify(MultilineTestResult)) {
     console.log("PASS: Custom Test 1");
 } else {
     console.log("FAIL: Custom Test 1");
-    console.log("Expected:", customtest1resultout);
-    console.log("Received:", customtest1result);
+    console.log("Expected:", MultilineTestOut);
+    console.log("Received:", MultilineTestResult);
 }
 
-var customtest2resultout = {
+var FirstHalfMultilineOut = {
     SearchTerm: 'dark',
     Results: []
   };
 
-const customtest2result = findSearchTermInBooks("dark", twentyLeaguesIn);
-if (JSON.stringify(customtest2resultout) === JSON.stringify(customtest2result)) {
+const FirstHalfMultilineResult = findSearchTermInBooks("dark", twentyLeaguesIn);
+if (JSON.stringify(FirstHalfMultilineOut) === JSON.stringify(FirstHalfMultilineResult)) {
     console.log("PASS: Custom Test 2");
 } else {
     console.log("FAIL: Custom Test 2");
-    console.log("Expected:", customtest2resultout);
-    console.log("Received:", customtest2result);
+    console.log("Expected:", FirstHalfMultilineOut);
+    console.log("Received:", FirstHalfMultilineResult);
 }
 
-var customtest3resultout = {
+var SecondHalfMultilineOut = {
     SearchTerm: 'ness',
     Results: []
   };
 
-const customtest3result = findSearchTermInBooks("ness", twentyLeaguesIn);
-if (JSON.stringify(customtest3resultout) === JSON.stringify(customtest3result)) {
+const SecondHalfMultilineResult = findSearchTermInBooks("ness", twentyLeaguesIn);
+if (JSON.stringify(SecondHalfMultilineOut) === JSON.stringify(SecondHalfMultilineResult)) {
     console.log("PASS: Custom Test 3");
 } else {
     console.log("FAIL: Custom Test 3");
-    console.log("Expected:", customtest3resultout);
-    console.log("Received:", customtest3result);
+    console.log("Expected:", SecondHalfMultilineOut);
+    console.log("Received:", SecondHalfMultilineResult);
 }
 
-var customtest4resultout = {
+var ApostropheTestOut = {
     SearchTerm: "Canadian\'s",
     Results: [
       { ISBN: '9780000528531', Page: 31, Line: 9 }
     ]
   };
 
-  const customtest4result = findSearchTermInBooks("Canadian\'s", twentyLeaguesIn);
-  if (JSON.stringify(customtest4resultout) === JSON.stringify(customtest4result)) {
+  const ApostropheTestResult = findSearchTermInBooks("Canadian\'s", goodReads);
+  if (JSON.stringify(ApostropheTestOut) === JSON.stringify(ApostropheTestResult)) {
       console.log("PASS: Custom Test 4");
   } else {
       console.log("FAIL: Custom Test 4");
-      console.log("Expected:", customtest4resultout);
-      console.log("Received:", customtest4result);
+      console.log("Expected:", ApostropheTestOut);
+      console.log("Received:", ApostropheTestResult);
+  }
+
+  const firstWordEdgeCaseOut = {
+    SearchTerm: 'now',
+    Results: [ { ISBN: '9780000528531', Page: 31, Line: 8 } ]
+  }
+
+  const firstWordEdgeCaseResult = findSearchTermInBooks("now", twentyLeaguesIn);
+  if (JSON.stringify(firstWordEdgeCaseOut) === JSON.stringify(firstWordEdgeCaseResult)) {
+      console.log("PASS: First Word Edge Case");
+  } else {
+      console.log("FAIL: First Word Edge Case");
+      console.log("Expected:", firstWordEdgeCaseOut);
+      console.log("Received:", firstWordEdgeCaseResult);
   }
 
 const test1result = findSearchTermInBooks("the", twentyLeaguesIn);
